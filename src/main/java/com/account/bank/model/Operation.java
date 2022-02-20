@@ -42,4 +42,16 @@ public class Operation implements Serializable {
     public Account getAccount() {
         return account;
     }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public void setDateOfOperation(Date dateOfOperation) {
+        this.dateOfOperation = dateOfOperation;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }
