@@ -35,16 +35,20 @@ public class BankService {
             operation.getAccount().setBalance(operation.getAccount().getBalance() - operation.getAmount());
             return operationRepo.save(operation);
         }else{
-            throw new Exception("you do not have enough money");
+            throw new UserNotFoundException("you do not have enough money");
         }
     }
-    public Operation retrieveAllMoneyOperation(Operation operation){
+    public Operation retrieveAllMoneyOperation(Account account, Operation operation){
         operation.setAmount(operation.getAccount().getBalance());
         operation.getAccount().setBalance(0l);
         return operationRepo.save(operation);
     }
     public List<Operation> allOperation(){
         return operationRepo.findAll();
+    }
+    public List<Operation> findOperationsByAccount(Long idAccount){
+        Account account = oneAccount(idAccount);
+        return account.getOperations();
     }
 
 }

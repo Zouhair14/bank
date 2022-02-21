@@ -2,7 +2,7 @@ package com.account.bank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Account implements Serializable {
@@ -12,12 +12,12 @@ public class Account implements Serializable {
     private Long accountId;
     private Long balance;
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private Set<Operation> operations;
+    private List<Operation> operations;
 
     public Account() {
     }
 
-    public Account(Long accountId, Long balance, Set<Operation> operations) {
+    public Account(Long accountId, Long balance, List<Operation> operations) {
         this.balance = balance;
         this.operations = operations;
     }
@@ -34,11 +34,11 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
-    public Set<Operation> getOperations() {
+    public List<Operation> getOperations() {
         return operations;
     }
 
-    public void setOperations(Set<Operation> operations) {
+    public void setOperations(List<Operation> operations) {
         this.operations = operations;
     }
 
