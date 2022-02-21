@@ -1,5 +1,7 @@
 package com.account.bank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class Operation implements Serializable {
     @Column(nullable = false, updatable = false)
     private Date dateOfOperation;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"operation", "hibernateLazyInitializer"})
     private Account account;
 
     public Operation() {

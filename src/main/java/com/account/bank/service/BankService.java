@@ -5,14 +5,23 @@ import com.account.bank.model.Account;
 import com.account.bank.model.Operation;
 import com.account.bank.repo.AccountRepo;
 import com.account.bank.repo.OperationRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BankService {
-    private AccountRepo accountRepo;
-    private OperationRepo operationRepo;
+    private final AccountRepo accountRepo;
+    private final OperationRepo operationRepo;
+
+    @Autowired
+    public BankService(AccountRepo accountRepo, OperationRepo operationRepo) {
+        this.accountRepo = accountRepo;
+        this.operationRepo = operationRepo;
+    }
 
     public Account addAccount(Account account){
         return accountRepo.save(account);
@@ -26,21 +35,36 @@ public class BankService {
     public void deleteAccount(Long id){
         accountRepo.deleteById(id);
     }
+    public Account updateAccount(Account account){
+        return accountRepo.save(account);
+    }
     public Operation saveMoneyOperation(Operation operation){
+        Account account = oneAccount(operation.getAccount().getAccountId());
+        operation.setAccount(account);
+        operation.setDateOfOperation(new Date(System.currentTimeMillis()));
         operation.getAccount().setBalance(operation.getAccount().getBalance() + operation.getAmount());
+        updateAccount(operation.getAccount());
         return operationRepo.save(operation);
     }
     public Operation retrieveMoneyOperation(Operation operation) throws Exception {
+        Account account = oneAccount(operation.getAccount().getAccountId());
+        operation.setAccount(account);
+        operation.setDateOfOperation(new Date(System.currentTimeMillis()));
         if (operation.getAccount().getBalance() - operation.getAmount()>=0) {
             operation.getAccount().setBalance(operation.getAccount().getBalance() - operation.getAmount());
+            updateAccount(operation.getAccount());
             return operationRepo.save(operation);
         }else{
             throw new UserNotFoundException("you do not have enough money");
         }
     }
-    public Operation retrieveAllMoneyOperation(Account account, Operation operation){
+    public Operation retrieveAllMoneyOperation(Operation operation){
+        Account account = oneAccount(operation.getAccount().getAccountId());
+        operation.setAccount(account);
+        operation.setDateOfOperation(new Date(System.currentTimeMillis()));
         operation.setAmount(operation.getAccount().getBalance());
         operation.getAccount().setBalance(0l);
+        updateAccount(operation.getAccount());
         return operationRepo.save(operation);
     }
     public List<Operation> allOperation(){

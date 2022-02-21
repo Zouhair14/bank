@@ -1,8 +1,11 @@
 package com.account.bank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Account implements Serializable {
@@ -34,6 +37,7 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
+    @JsonIgnore
     public List<Operation> getOperations() {
         return operations;
     }
