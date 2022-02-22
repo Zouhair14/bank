@@ -33,17 +33,19 @@ public class BankService {
         return accountRepo.getOneAccountById(id).orElseThrow(()-> new UserNotFoundException("User "+id+" was not found"));
     }
     public void deleteAccount(Long id){
+        oneAccount(id);
         accountRepo.deleteById(id);
     }
-    public Account updateAccount(Account account){
-        return accountRepo.save(account);
-    }
-    public Operation saveMoneyOperation(Operation operation){
+    public Operation serviceSaveMony(Operation operation){
         Account account = oneAccount(operation.getAccount().getAccountId());
         operation.setAccount(account);
         operation.setDateOfOperation(new Date(System.currentTimeMillis()));
-        operation.getAccount().setBalance(operation.getAccount().getBalance() + operation.getAmount());
-        updateAccount(operation.getAccount());
+        operation.getAccount().setBalance(account.getBalance() + operation.getAmount());
+        addAccount(operation.getAccount());
+        return operation;
+    }
+    public Operation saveMoneyOperation(Operation operation){
+        serviceSaveMony(operation);
         return operationRepo.save(operation);
     }
     public Operation retrieveMoneyOperation(Operation operation) throws Exception {
@@ -52,7 +54,7 @@ public class BankService {
         operation.setDateOfOperation(new Date(System.currentTimeMillis()));
         if (operation.getAccount().getBalance() - operation.getAmount()>=0) {
             operation.getAccount().setBalance(operation.getAccount().getBalance() - operation.getAmount());
-            updateAccount(operation.getAccount());
+            addAccount(operation.getAccount());
             return operationRepo.save(operation);
         }else{
             throw new UserNotFoundException("you do not have enough money");
@@ -64,7 +66,7 @@ public class BankService {
         operation.setDateOfOperation(new Date(System.currentTimeMillis()));
         operation.setAmount(operation.getAccount().getBalance());
         operation.getAccount().setBalance(0l);
-        updateAccount(operation.getAccount());
+        addAccount(operation.getAccount());
         return operationRepo.save(operation);
     }
     public List<Operation> allOperation(){

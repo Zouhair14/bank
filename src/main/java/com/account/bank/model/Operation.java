@@ -24,8 +24,7 @@ public class Operation implements Serializable {
     public Operation() {
     }
 
-    public Operation(Long operationId, Long amount, Date dateOfOperation, Account account) {
-        this.amount = amount;
+    public Operation(Long amount, Date dateOfOperation, Account account) {
         this.dateOfOperation = dateOfOperation;
         this.account = account;
     }

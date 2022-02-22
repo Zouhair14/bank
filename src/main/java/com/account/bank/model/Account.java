@@ -20,9 +20,12 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(Long accountId, Long balance, List<Operation> operations) {
+    public Account(Long balance) {
         this.balance = balance;
-        this.operations = operations;
+    }
+    public Account(Long accountId, Long balance) {
+        this.accountId = accountId;
+        this.balance = balance;
     }
 
     public Long getAccountId() {

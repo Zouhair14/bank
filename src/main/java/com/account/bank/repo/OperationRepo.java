@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface OperationRepo extends JpaRepository<Operation,Long> {
 
-    @Query("SELECT u FROM Operation u")
-    public List<Operation> findAllOperations();
+    /*@Query("SELECT u FROM Operation u")
+    public List<Operation> findAllOperations();*/
 }
